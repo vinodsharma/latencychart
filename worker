@@ -1,0 +1,14 @@
+#!/bin/bash
+cd "`dirname $0`"
+OPTERR=0
+while getopts 'i:' OPTION; do
+	  case $OPTION in
+	  i)	id="$OPTARG"
+			;;
+	  ?)	;;
+	  esac
+done
+# We must redirect to log file here as opposed to in worker.py since
+# webkit module will not print to sys.stderr (it will write directly
+# to stderr fd (2)).
+xvfb-run --auto-servernum python ./worker.py $@ &> /tmp/worker-$id.log
